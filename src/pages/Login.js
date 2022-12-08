@@ -28,6 +28,10 @@ class Login extends React.Component {
         this.setState({
           disable: false,
         });
+      } else {
+        this.setState({
+          disable: true,
+        });
       }
     });
   };
