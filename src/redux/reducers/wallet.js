@@ -1,6 +1,7 @@
 // Esse reducer será responsável por tratar o todas as informações relacionadas as despesas
 import {
-  RECEIVE_CURRENCY, RECEIVE_DATE_EXPENSE, SUM_VALUE_TOTAL } from '../actions/index';
+  RECEIVE_CURRENCY, RECEIVE_DATE_EXPENSE, SUM_VALUE_TOTAL, DELETE_EXPENSE,
+} from '../actions/index';
 
 const INITIAL_STATE = {
   currencies: [],
@@ -28,7 +29,12 @@ const wallet = (state = INITIAL_STATE, action) => {
   case SUM_VALUE_TOTAL:
     return {
       ...state,
-      valueTotal: state.valueTotal + action.value,
+      valueTotal: action.value,
+    };
+  case DELETE_EXPENSE:
+    return {
+      ...state,
+      expenses: state.expenses.filter((expense) => expense.id !== action.id),
     };
   default:
     return state;

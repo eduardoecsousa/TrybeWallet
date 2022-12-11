@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import WalletForm from '../components/WalletForm';
 import { fetchCurrency, sumValueTotal } from '../redux/actions';
+import Table from '../components/Table';
 
 class Wallet extends React.Component {
   componentDidMount() {
@@ -13,8 +14,9 @@ class Wallet extends React.Component {
 
   componentDidUpdate() {
     const { dispatch, expenses } = this.props;
+    console.log(expenses);
     const valueTotal = expenses.reduce((acc, ele) => {
-      acc = ele.value * ele.exchangeRates[ele.currency].ask;
+      acc += ele.value * ele.exchangeRates[ele.currency].ask;
       return acc;
     }, 0);
 
@@ -26,6 +28,7 @@ class Wallet extends React.Component {
       <div>
         <Header />
         <WalletForm />
+        <Table />
       </div>
     );
   }
