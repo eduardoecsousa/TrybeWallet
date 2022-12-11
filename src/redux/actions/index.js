@@ -1,15 +1,28 @@
 // Coloque aqui suas actions
 export const ENTER_EMAIL = 'ENTER_EMAIL';
 export const RECEIVE_CURRENCY = 'REQUEST_CURRENCY';
+export const RECEIVE_DATE_EXPENSE = 'RECEIVE_DATE_EXPENSE';
+export const SUM_VALUE_TOTAL = 'SUM_VALUE_TOTAL';
 
 export const actionEntreEmail = (email) => ({
   type: ENTER_EMAIL,
   email,
 });
 
-export const receiveCurrency = (currency) => ({
+export const receiveCurrency = (currency, json) => ({
   type: RECEIVE_CURRENCY,
   currency,
+  json,
+});
+
+export const receiveDateExpense = (dateExpense) => ({
+  type: RECEIVE_DATE_EXPENSE,
+  dateExpense,
+});
+
+export const sumValueTotal = (value) => ({
+  type: SUM_VALUE_TOTAL,
+  value,
 });
 
 export function fetchCurrency() {
@@ -18,6 +31,6 @@ export function fetchCurrency() {
     const json = await requesAPI.json();
     const arrayCurrency = Object.keys(json);
     const currency = arrayCurrency.filter((e) => e !== 'USDT');
-    return dispatch(receiveCurrency(currency));
+    return dispatch(receiveCurrency(currency, json));
   };
 }

@@ -3,12 +3,22 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import Header from '../components/Header';
 import WalletForm from '../components/WalletForm';
-import { fetchCurrency } from '../redux/actions';
+import { fetchCurrency, sumValueTotal } from '../redux/actions';
 
 class Wallet extends React.Component {
   componentDidMount() {
     const { dispatch } = this.props;
     dispatch(fetchCurrency());
+  }
+
+  componentDidUpdate() {
+    const { dispatch, expenses } = this.props;
+    const valueTotal = expenses.reduce((acc, ele) => {
+      acc = ele.value * ele.exchangeRates[ele.currency].ask;
+      return acc;
+    }, 0);
+
+    dispatch(sumValueTotal(valueTotal));
   }
 
   render() {
@@ -23,6 +33,11 @@ class Wallet extends React.Component {
 
 Wallet.propTypes = {
   dispatch: PropTypes.func.isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
-export default connect()(Wallet);
+const mapStateToProps = (state) => ({
+  expenses: state.wallet.expenses,
+});
+
+export default connect(mapStateToProps)(Wallet);
