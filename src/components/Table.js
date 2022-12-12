@@ -1,12 +1,17 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { deleteExpense } from '../redux/actions';
+import { deleteExpense, requestEditExpense } from '../redux/actions';
 
 class Table extends Component {
-  handleClick = (id) => {
+  handleClickDelete = (id) => {
     const { dispatch } = this.props;
     dispatch(deleteExpense(id));
+  };
+
+  handleClickEdit = (id, expense) => {
+    const { dispatch } = this.props;
+    dispatch(requestEditExpense(id, expense));
   };
 
   render() {
@@ -51,10 +56,17 @@ class Table extends Component {
                 <td>
                   <button
                     type="button"
-                    onClick={ () => this.handleClick(expense.id) }
+                    onClick={ () => this.handleClickDelete(expense.id) }
                     data-testid="delete-btn"
                   >
                     Excluir
+                  </button>
+                  <button
+                    type="button"
+                    onClick={ () => this.handleClickEdit(expense.id, expense) }
+                    data-testid="edit-btn"
+                  >
+                    Editar despesa
                   </button>
                 </td>
               </tr>

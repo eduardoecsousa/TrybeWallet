@@ -1,16 +1,36 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { fetchCurrency, receiveDateExpense } from '../redux/actions';
+import { fetchCurrency, receiveDateExpense, editExpense } from '../redux/actions';
 
 class WalletForm extends Component {
-  state = {
-    value: 0,
-    description: '',
-    currency: 'USD',
-    method: '',
-    tag: '',
-  };
+  constructor() {
+    super();
+    this.state = {
+      value: 0,
+      description: '',
+      currency: 'USD',
+      method: '',
+      tag: '',
+      updated: false,
+    };
+  }
+
+  componentDidUpdate() {
+    const { editor, expenseToEdit } = this.props;
+    const { updated } = this.state;
+    console.log(editor);
+    if (editor && !updated) {
+      this.setState({
+        value: expenseToEdit.value,
+        description: expenseToEdit.description,
+        currency: expenseToEdit.currency,
+        method: expenseToEdit.method,
+        tag: expenseToEdit.tag,
+        updated: true,
+      });
+    }
+  }
 
   handleChange = ({ target }) => {
     const { name, value } = target;
@@ -19,11 +39,17 @@ class WalletForm extends Component {
     });
   };
 
-  handleClick = async () => {
-    const { idToEdit, dispatch, coins } = this.props;
+  handleClickAdd = async () => {
+    const { id, dispatch, coins } = this.props;
+    const { value,
+      description,
+      currency,
+      method,
+      tag } = this.state;
+    const objExpense = { value, description, currency, method, tag };
     dispatch(fetchCurrency());
-    const objdateExpece = { id: idToEdit,
-      ...this.state,
+    const objdateExpece = { id,
+      ...objExpense,
       exchangeRates: coins,
     };
     dispatch(receiveDateExpense(objdateExpece));
@@ -37,9 +63,36 @@ class WalletForm extends Component {
     });
   };
 
+  handleClickEdit = () => {
+    const { idToEdit, dispatch, coins, expenses } = this.props;
+    const { value,
+      description,
+      currency,
+      method,
+      tag } = this.state;
+    const objExpense = { value, description, currency, method, tag };
+    dispatch(fetchCurrency());
+    const objdateExpece = { id: idToEdit,
+      ...objExpense,
+      exchangeRates: coins,
+    };
+    console.log(idToEdit);
+    const newExpense = expenses.map((e) => (e.id === idToEdit ? objdateExpece : e));
+    dispatch(editExpense(newExpense));
+    this.setState({
+      value: '',
+      description: '',
+      currency: 'USD',
+      method: '',
+      tag: '',
+    }, () => {
+      this.setState({ updated: false });
+    });
+  };
+
   render() {
     const { value, description, currency, method, tag } = this.state;
-    const { currencies } = this.props;
+    const { currencies, editor } = this.props;
     return (
       <form>
         <label htmlFor="expense">
@@ -108,12 +161,21 @@ class WalletForm extends Component {
             <option>Saúde</option>
           </select>
         </label>
-        <button
-          onClick={ this.handleClick }
-          type="button"
-        >
-          Adicionar despesa
-        </button>
+        {editor ? (
+          <button
+            onClick={ this.handleClickEdit }
+            type="button"
+          >
+            Editar despesas
+          </button>)
+          : (
+            <button
+              onClick={ this.handleClickAdd }
+              type="button"
+            >
+              Adicionar despesa
+            </button>
+          ) }
       </form>
     );
   }
@@ -121,15 +183,29 @@ class WalletForm extends Component {
 
 const mapStateToProps = (state) => ({
   currencies: state.wallet.currencies,
-  idToEdit: state.wallet.idToEdit,
+  id: state.wallet.id,
   coins: state.wallet.coins,
+  expenses: state.wallet.expenses,
+  editor: state.wallet.editor,
+  idToEdit: state.wallet.idToEdit,
+  expenseToEdit: state.wallet.expenseToEdit,
 });
 
 WalletForm.propTypes = {
   currencies: PropTypes.arrayOf(PropTypes.string).isRequired,
-  idToEdit: PropTypes.number.isRequired,
+  id: PropTypes.number.isRequired,
   dispatch: PropTypes.func.isRequired,
   coins: PropTypes.shape({}).isRequired,
+  editor: PropTypes.bool.isRequired,
+  expenseToEdit: PropTypes.shape({
+    value: PropTypes.string,
+    description: PropTypes.string,
+    currency: PropTypes.string,
+    method: PropTypes.string,
+    tag: PropTypes.string,
+  }).isRequired,
+  idToEdit: PropTypes.number.isRequired,
+  expenses: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 export default connect(mapStateToProps)(WalletForm);
