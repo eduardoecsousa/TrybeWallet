@@ -3,18 +3,18 @@ import userEvent from '@testing-library/user-event';
 import {
   renderWithRouterAndRedux,
 } from './helpers/renderWith';
-import Login from '../pages/Login';
+import App from '../App';
 
 const idHtml = 'password-input';
 
 describe('0 - Testa a pagina de login', () => {
   test('Verifica se a rota esta correta', () => {
-    const { history } = renderWithRouterAndRedux(<Login />);
+    const { history } = renderWithRouterAndRedux(<App />);
     const { pathname } = history.location;
     expect(pathname).toBe('/');
   });
   test('Verifica se é renderizado elementos para o usuairo inserir email e senha', () => {
-    renderWithRouterAndRedux(<Login />);
+    renderWithRouterAndRedux(<App />);
     const inputEmail = screen.getByRole('textbox');
     const inputPassword = screen.getByTestId(idHtml);
 
@@ -22,7 +22,7 @@ describe('0 - Testa a pagina de login', () => {
     expect(inputPassword).toBeInTheDocument();
   });
   test('Verifica se é rederizado um "button" com o texto "Entrar"', () => {
-    renderWithRouterAndRedux(<Login />);
+    renderWithRouterAndRedux(<App />);
     const button = screen.getByRole('button', {
       name: /entrar/i,
     });
@@ -31,7 +31,7 @@ describe('0 - Testa a pagina de login', () => {
   });
   describe('Verifica se as valição devidas foram realizadas', () => {
     test('Verifica se mesmo com o a senha valida o botão não é habilitado', () => {
-      renderWithRouterAndRedux(<Login />);
+      renderWithRouterAndRedux(<App />);
       const inputEmail = screen.getByRole('textbox');
       const inputPassword = screen.getByTestId(idHtml);
       const button = screen.getByRole('button', {
@@ -45,7 +45,7 @@ describe('0 - Testa a pagina de login', () => {
     });
     test('Verifica se mesmo com o email valido o botão não é habilitado', () => {
       const email = 'dudu@gmail.com';
-      renderWithRouterAndRedux(<Login />);
+      renderWithRouterAndRedux(<App />);
       const inputEmail = screen.getByRole('textbox');
       const inputPassword = screen.getByTestId(idHtml);
       const button = screen.getByRole('button', {
@@ -58,7 +58,7 @@ describe('0 - Testa a pagina de login', () => {
     });
     test('Verifica se com email e senha validos o botão é habilitado', () => {
       const email = 'satu@gmail.com';
-      renderWithRouterAndRedux(<Login />);
+      renderWithRouterAndRedux(<App />);
       const inputEmail = screen.getByRole('textbox');
       const inputPassword = screen.getByTestId(idHtml);
       const button = screen.getByRole('button', {
@@ -73,7 +73,7 @@ describe('0 - Testa a pagina de login', () => {
   });
   test('Verifica se o email é salvo no estado global', () => {
     const email = 'oliva@gmail.com';
-    const { store } = renderWithRouterAndRedux(<Login />);
+    const { store } = renderWithRouterAndRedux(<App />);
     const inputEmail = screen.getByRole('textbox');
     const inputPassword = screen.getByTestId(idHtml);
     const button = screen.getByRole('button', {
@@ -88,7 +88,7 @@ describe('0 - Testa a pagina de login', () => {
     expect(storeGlobal.user.email).toBe(email);
   });
   test('Verifica a apos clicar no button a rota é derecionada para "/carteira"', () => {
-    const { history } = renderWithRouterAndRedux(<Login />);
+    const { history } = renderWithRouterAndRedux(<App />);
     const inputEmail = screen.getByRole('textbox');
     const inputPassword = screen.getByTestId(idHtml);
     const button = screen.getByRole('button', {

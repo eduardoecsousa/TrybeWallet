@@ -46,10 +46,14 @@ export const editExpense = (newExpense) => ({
 
 export function fetchCurrency() {
   return async (dispatch) => {
-    const requesAPI = await fetch('https://economia.awesomeapi.com.br/json/all');
-    const json = await requesAPI.json();
-    const arrayCurrency = Object.keys(json);
-    const currency = arrayCurrency.filter((e) => e !== 'USDT');
-    return dispatch(receiveCurrency(currency, json));
+    try {
+      const requesAPI = await fetch('https://economia.awesomeapi.com.br/json/all');
+      const json = await requesAPI.json();
+      const arrayCurrency = Object.keys(json);
+      const currency = arrayCurrency.filter((e) => e !== 'USDT');
+      return dispatch(receiveCurrency(currency, json));
+    } catch (erro) {
+      console.log(erro);
+    }
   };
 }
