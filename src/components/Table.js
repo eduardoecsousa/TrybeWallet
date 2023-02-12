@@ -18,7 +18,7 @@ class Table extends Component {
     const { expenses } = this.props;
     return (
       <div>
-        <table border="1">
+        <table border="1" className="table is-striped">
           <thead>
             <tr>
               <th>Descrição</th>

@@ -10,6 +10,7 @@ class Button extends Component {
           type="submit"
           onClick={ onClick }
           disabled={ disable }
+          className="button is-link"
         >
           Entrar
         </button>

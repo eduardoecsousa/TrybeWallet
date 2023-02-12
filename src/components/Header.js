@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import title from '../Img/Title.jpeg';
 
 class Header extends Component {
   render() {
@@ -12,6 +13,7 @@ class Header extends Component {
     );
     return (
       <header>
+        <img src={ title } alt="EmojiMoney" className="title" />
         <p data-testid="email-field">{email}</p>
         <p data-testid="total-field">
           { valeubonito }

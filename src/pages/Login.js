@@ -5,6 +5,7 @@ import PropTypes from 'prop-types';
 import FormLogin from '../components/FormLogin';
 import Button from '../components/Button';
 import { actionEntreEmail } from '../redux/actions';
+import title from '../Img/Title.jpeg';
 
 class Login extends React.Component {
   state = {
@@ -46,10 +47,17 @@ class Login extends React.Component {
   render() {
     const { email, password, disable, redirect } = this.state;
     return (
-      <div>
-        <FormLogin email={ email } password={ password } onChange={ this.handleChange } />
-        <Button disable={ disable } onClick={ this.changeClick } />
-        {redirect && <Redirect to="/carteira" />}
+      <div className="container-login">
+        <div className="container-form">
+          <img src={ title } alt="EmojiMoney" className="title" />
+          <FormLogin
+            email={ email }
+            password={ password }
+            onChange={ this.handleChange }
+          />
+          <Button disable={ disable } onClick={ this.changeClick } />
+          {redirect && <Redirect to="/carteira" />}
+        </div>
       </div>
     );
   }

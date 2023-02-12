@@ -75,7 +75,6 @@ class WalletForm extends Component {
       ...objExpense,
       exchangeRates: coins,
     };
-    console.log(idToEdit);
     const newExpense = expenses.map((e) => (e.id === idToEdit ? objdateExpece : e));
     dispatch(editExpense(newExpense));
     this.setState({
